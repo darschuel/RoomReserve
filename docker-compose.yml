@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16
+    container_name: roomreserve-db
+    environment:
+      POSTGRES_DB: roomreserve
+      POSTGRES_USER: roomreserve
+      POSTGRES_PASSWORD: roomreserve
+    ports:
+      - "5432:5432"
+    volumes:
+      - roomreserve_pgdata:/var/lib/postgresql/data
+
+volumes:
+  roomreserve_pgdata:
+
