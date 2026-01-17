@@ -10,6 +10,21 @@ jobs:
   test-backend:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: roomreserve
+          POSTGRES_USER: roomreserve
+          POSTGRES_PASSWORD: roomreserve
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U roomreserve -d roomreserve"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,5 +38,9 @@ jobs:
 
       - name: Run backend tests
         working-directory: backend/roomreserve
+        env:
+          QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://localhost:5432/roomreserve
+          QUARKUS_DATASOURCE_USERNAME: roomreserve
+          QUARKUS_DATASOURCE_PASSWORD: roomreserve
         run: mvn -B test
 
